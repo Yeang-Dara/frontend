@@ -661,7 +661,7 @@ export default {
       });
     },
     comfirmDeleteStockItem() {
-      // console.log(this.editStock.id);
+
       Stock.delete(this.editStock.id)
         .then((res) => {
           this.success = true;

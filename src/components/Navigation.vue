@@ -200,7 +200,7 @@ export default {
         title: "Spare parts",
         items: [
           {
-              title: "Spare Parts", 
+              title: "Stock Spare Parts", 
               link: "/main_page/spare_part",
               icons:"mdi-toolbox",
           },
