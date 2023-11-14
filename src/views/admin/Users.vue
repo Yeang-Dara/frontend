@@ -200,13 +200,7 @@ export default {
     info: false,
     rules: ["admin", "employee"],
     headers: [
-      {
-        text: "Last Name",
-        align: "start",
-        sortable: false,
-        value: "last_name",
-        class: " white--text",
-      },
+      { text: "Last Name", align: "start", sortable: false, value: "last_name",class: " white--text",},
       { text: "First Name", value: "first_name", class: " white--text" },
       { text: "Username", value: "username", class: " white--text" },
       { text: "Rules", value: "rules", class: " white--text" },
@@ -238,7 +232,6 @@ export default {
         : "Update User Information";
     },
   },
-
   watch: {
     dialog(val) {
       val || this.close();
@@ -250,11 +243,9 @@ export default {
       val || this.closeDelete();
     },
   },
-
   created() {
     this.getUser();
   },
-
   methods: {
     hide_success: function (event) {
       console.log("Hide");

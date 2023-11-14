@@ -3,6 +3,9 @@ export default{
     list(){
         return Api().get("v1/spareparts/getdata");
     },
+    list1(){
+        return Api().get("v1/spareparts/getsparepart");
+    },
     create(data){
         return Api().post("v1/spareparts/create", data);
     },

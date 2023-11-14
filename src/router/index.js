@@ -24,6 +24,7 @@ import ProfileEm from '../views/employee/ProfileEm.vue'
 import ViewdetailATM from '../views/employee/ViewdetailATM.vue'
 import Addnewmachine from '../views/employee/Addnewmachine.vue'
 import Updatemachine from '../views/employee/Updatemachine.vue'
+import EmSparepart from '../views/employee/EmSparepart.vue' 
 
 
 
@@ -154,7 +155,11 @@ const routes = [
           name : 'updatemachine',
           component : Updatemachine
         },
- 
+        {
+          path:'sparepart',
+          name:'sparepart',
+          component:EmSparepart,
+        }
       ],
 
     }

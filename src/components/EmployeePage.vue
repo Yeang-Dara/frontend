@@ -6,9 +6,7 @@
         <div>INVENTORY MANAGEMENT SYSTEM</div>
       </div>
       <v-spacer></v-spacer>
-      <v-menu offset-y transition="scale-transition">
-   
-      </v-menu>
+      <!-- <v-menu offset-y transition="scale-transition"></v-menu> -->
       <v-menu
         offset-y
         origin="center center"
@@ -171,7 +169,6 @@ export default {
           },
         ],
       },
-
       {
         group: false,
         title: "Report",
@@ -182,6 +179,17 @@ export default {
             icons: "mdi-calendar-export",
           },
         ],
+      },
+      {
+        group:false,
+        title: "Spare parts",
+        items: [
+          {
+              title: "Stock Spare Parts", 
+              link: "/employee/sparepart",
+              icons:"mdi-toolbox",
+          },
+        ], 
       },
     ],
   }),

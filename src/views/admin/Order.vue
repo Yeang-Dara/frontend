@@ -303,7 +303,6 @@
                     </template>
                     <span>Add item</span>
                   </v-tooltip>
-                
                 </template>
                 <template v-slot:[`item.username`]="{ item }">
                   {{ item.users.username }}
@@ -377,27 +376,13 @@ export default {
       { text: "Arrival Time", value: "arrival_date", class: " white--text" },
       { text: "Warehouse", value: "warehouse", class: " white--text" },
       { text: "Status", value: "status", class: " white--text" },
-      {
-        text: "Actions",
-        value: "actions",
-        sortable: false,
-        class: " white--text",
-      },
+      { text: "Actions", value: "actions", sortable: false, class: " white--text",},
     ],
     headers1: [
-      {
-        text: "Serail Number",
-        align: "start",
-        value: "serail_number",
-        class: " white--text",
-      },
+      { text: "Serail Number", align: "start", value: "serail_number", class: " white--text"},
       { text: "forSellorRest", value: "forSellorRest", class: " white--text" },
       { text: "Status", value: "status", class: " white--text" },
-      {
-        text: "Actions",
-        value: "action",
-        sortable: false,
-        class: " white--text",
+      { text: "Actions", value: "action", sortable: false, class: " white--text",
       },
     ],
     stocks: [],

@@ -37,7 +37,7 @@
               <v-col v-col cols="6">
                 <v-img src="@/assets/atm.png" style="width: 80px; height: 80px"></v-img>
               </v-col>
-              <v-col class="text-h5 text-start mt-6" cols="6" style="width: 140px; color: gray;" >Non-Actives
+              <v-col class="text-h5 text-start mt-6" cols="6" style="width: 140px; color: gray;" >NonActives
                 <v-col class="text-start text-h2 px-0" style="color: gray; font-size:bold; font-weight:normal;">{{ total.nonactive }}</v-col>
               </v-col>
             </v-row>

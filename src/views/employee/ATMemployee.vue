@@ -203,8 +203,8 @@ export default {
       { text: "Type", value: "type_name", class: " white--text" },
       { text: "Model", value: "model_name", class: " white--text" },
       { text: "Install Date", value: "install_date", class: " white--text" },
-        { text: "Status", value: "status", class: " white--text" },
-      { text: "Addess", value: "address", class: " white--text", width: '40%'  },
+      { text: "Status", value: "status", class: " white--text" },
+      { text: "Addess", value: "address", class: " white--text", width: '35%'  },
       { text: "Actions",value: "actions",sortable: false,class: " white--text",},
     ],
     filter: {

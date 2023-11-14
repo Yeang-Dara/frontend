@@ -183,7 +183,7 @@ export default {
       { text: "Part Number", value: "part_number", class: " white--text" },
       { text: "Total Quantity", value: "quantity", class: " white--text" },
       { text: "Quantity Used", value: "quantity_used", class: " white--text" },
-      { text: "Quantity Remain", value: "quantity_used", class: " white--text"},
+      { text: "Quantity Remain", value: "quantity_remain", class: " white--text"},
       { text: "For Model", value: "for_machine_model", class: " white--text" },
       { text: "Actions", value: "actions", class: " white--text" },
     ],
@@ -261,6 +261,7 @@ export default {
             });
             console.dir(err);
           });
+    this.getSparepart();
       } 
       else {
         let data = {};
@@ -282,7 +283,7 @@ export default {
             console.dir(err);
           });
       }
-      this.getSparepart();
+    this.getSparepart();
     },
     cancel(){
       this.deleteData= false;

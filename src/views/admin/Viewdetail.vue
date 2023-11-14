@@ -272,6 +272,19 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="deleteData1" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >Are you sure you want to delete item?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" text @click="cancel1">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="okDelete1">OK</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <template>
           <div>
             <v-expansion-panels v-model="panel" :readonly="readonly" multiple>
@@ -281,9 +294,79 @@
                 >
                 <v-expansion-panel-content>
                   <div class="justify-end d-flex mb-2">
-                    <v-btn color="#FF8C00" class="white--text"
-                      >Add Replace Mainpart</v-btn
-                    >
+                    <v-dialog v-model="dialog1" max-width="700px">
+                      <template v-slot:activator="{on, attrs}">
+                        <v-btn
+                          color="#FF8C00" 
+                          dark
+                          class="mb-2 justify-end d-flex"
+                          v-bind="attrs"
+                          v-on="on"
+                        >Add new replace</v-btn>
+                      </template>
+                      <v-card>
+                        <v-card-title style="background-color: #35acd3; color: white">{{formTitle1 }}</v-card-title>
+                        <v-card-text class="pt-2 pb-0">
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" md="6" class="py-0 pb-0">
+                                <label for="name">Spare Part Name</label>
+                                <v-icon small color="orange">mdi-star</v-icon>
+                                <v-select
+                                  :items="data1"
+                                  item-value="id"
+                                  item-text="spareparts_name"
+                                  v-model=" editedItem1.sparepart_id"
+                                  outlined
+                                ></v-select>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="6" class="py-0 pb-0">
+                                <label for="name">Part Number</label>
+                                <v-icon small color="orange">mdi-star</v-icon>
+                                <v-text-field
+                                  v-model=" editedItem1.part_number"
+                                  outlined
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="6" class="py-0 pb-0">
+                                <label for="name">Quantity</label>
+                                <v-icon small color="orange">mdi-star</v-icon>
+                                <v-text-field
+                                  v-model=" editedItem1.quantity"
+                                  outlined
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="6" class="py-0 pb-0">
+                                <label for="name">Date</label>
+                                <v-icon small color="orange">mdi-star</v-icon>
+                                <v-text-field
+                                  v-model=" editedItem1.replace_date"
+                                  outlined
+                                  type="date"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="6" class="py-0 pb-0">
+                                <label for="name">Replace By</label>
+                                <v-icon small color="orange">mdi-star</v-icon>
+                                <v-text-field
+                                  v-model=" editedItem1.replacer_name"
+                                  outlined
+                                ></v-text-field>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="red" text @click="cancelAdd"
+                            >Cancel
+                          </v-btn>
+                          <v-btn color="blue darken-1" text @click="add(user)"
+                            >Save</v-btn
+                          >
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </div>
                   <v-data-table
                     class="elevation-1"
@@ -292,7 +375,7 @@
                     :items="spareparts"
                     :search="search"
                   >
-                    <template v-slot:[`item.actions`]="{}">
+                    <template v-slot:[`item.actions`]="{item}">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
@@ -302,7 +385,7 @@
                             v-bind="attrs"
                             v-on="on"
                           >
-                            <v-icon small color="white"> mdi-pencil </v-icon>
+                            <v-icon small color="white" @click="editMainpart(item)"> mdi-pencil </v-icon>
                           </v-btn>
                         </template>
                         <span>Edit</span>
@@ -310,7 +393,7 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn color="error" small v-bind="attrs" v-on="on">
-                            <v-icon small outlined>mdi-delete</v-icon>
+                            <v-icon small outlined @click="deletMainpart(item)">mdi-delete</v-icon>
                           </v-btn>
                         </template>
                         <span>Delete</span>
@@ -423,6 +506,8 @@
 <script>
 import Using from "../../apis/Using";
 import Maintenace from "../../apis/Maintenace";
+import Mainpart from "../../apis/Mainpart";
+import Sparepart from "../../apis/Sparepart";
 import Swal from "sweetalert2";
 import moment from "moment";
 export default {
@@ -430,16 +515,28 @@ export default {
     using: [],
     date: [],
     deleteData:false,
+    deleteData1:false,
     itemsPerPage: 10,
     search: "",
     user: {},
     dialog: false,
+    dialog1:false,
     editedIndex: -1,
+    editedIndex1:-1,
     defaultItem: {
       no: 0,
       name: "",
       description: "",
       image: "",
+    },
+    editedItem1:{
+      mainpart_name:"",
+      sparepart_id:"",
+      mainpart_name:"",
+      part_number:"",
+      replace_date:"",
+      replacer_name:"",
+      quantity:"",
     },
     editedItem: {
       atm_id: "",
@@ -447,65 +544,15 @@ export default {
       maintenace_date: "",
     },
     headers: [
-      {
-        text: "Spare part Name",
-        value: "sparepart_name",
-        class: " white--text",
-      },
-      {
-        text: "Serail Number",
-        value: "sparepart_quantity",
-        class: " white--text",
-      },
-      {
-        text: "Quantity",
-        value: "take_to_replaced",
-        class: " white--text",
-      },
-      {
-        text: "Date",
-        value: "take_to_replaced",
-        class: " white--text",
-      },
-      {
-        text: "Replace By",
-        value: "take_to_replaced",
-        class: " white--text",
-      },
-      {
-        text: "Remark",
-        value: "take_to_replaced",
-        class: " white--text",
-      },
+      { text: "Spare part Name", value: "spareparts_name", class: " white--text",},
+      { text: "Part Number", value: "part_number",class: " white--text",},
+      { text: "Quantity", value: "quantity",class: " white--text",},
+      { text: "Date", value: "replace_date",class: " white--text",},
+      { text: "Replace By", value: "replacer_name", class: " white--text",},
       { text: "Actions", value: "actions", class: " white--text" },
     ],
-    spareparts: [
-      {
-        sparepart_name: "Main Board",
-        sparepart_quantity: 5,
-        take_to_replaced: 1,
-      },
-      {
-        sparepart_name: "Android Board",
-        sparepart_quantity: 3,
-        take_to_replaced: 2,
-      },
-      {
-        sparepart_name: "CIS Cable",
-        sparepart_quantity: 10,
-        take_to_replaced: 1,
-      },
-      {
-        sparepart_name: "Motor",
-        sparepart_quantity: 5,
-        take_to_replaced: 1,
-      },
-      {
-        sparepart_name: "Screen",
-        sparepart_quantity: 5,
-        take_to_replaced: 1,
-      },
-    ],
+    data1:[{text:'spareparts_name'}],
+    spareparts: [],
     maintenaces: [],
     headers1: [
       { text: "Maintenace by", value: "maintenace_name", class: " white--text"},
@@ -521,12 +568,18 @@ export default {
       console.log(Response.data.data);
     });
     this.getData();
+    this.getMainpart();
   },
   computed: {
     formTitle() {
       return this.editedIndex === -1
         ? "Add New Maintenance History"
         : "Edite Maintenance Information";
+    },
+    formTitle1() {
+      return this.editedIndex1 === -1
+        ? "Add New Replace Main Part"
+        : "Edite Replace Main Part Information";
     },
   },
   watch: {
@@ -536,6 +589,12 @@ export default {
     deleteData(val) {
       val || this.cancel();
     },
+    deleteData1(val) {
+      val || this.cancel1();
+    },
+    dialog1(val){
+      val || this.cancelAdd();
+    }
   },
   methods: {
      formatDate(value) {
@@ -548,6 +607,14 @@ export default {
       console.log(Response.data);
       });
     },
+    getMainpart(){
+      let id = this.$route.params.id;
+      Mainpart.list(id).then((Response) => {
+      this.spareparts = Response.data;
+      console.log(Response.data);
+      });
+    },
+    
     cancel(){
       this.deleteData = false;
       this.$nextTick(() => {
@@ -562,15 +629,57 @@ export default {
         this.editedIndex = -1;
       });
     },
+    cancelAdd() {
+      this.dialog1 = false;
+      this.$nextTick(() => {
+        this.editedItem1 = Object.assign({}, this.defaultItem);
+        this.editedIndex1 = -1;
+      });
+    },
+    editMainpart(item){
+      this.editedIndex1 = 1;
+      this.editedItem1 = Object.assign({}, item);
+      this.dialog1 = true;
+    },
+    deletMainpart(item){
+      this.deleteData1 = true;
+      this.editedItem1 = Object.assign({}, item);
+    },
+    cancel1(){
+      this.deleteData1 = false;
+      this.$nextTick(() => {
+        this.editedItem1 = Object.assign({}, this.defaultItem);
+        this.editedIndex1 = -1;
+      });
+    },
     updateItem(item) {
       this.editedIndex = 1;
-      this.editedItem = Object.assign({}, item);
+      this.editedItem1 = Object.assign({}, item);
       this.dialog = true;
       console.log(item);
     },
     deleteItem(item){
       this.deleteData = true;
       this.editedItem = Object.assign({}, item);
+    },
+    okDelete1(){
+      console.log(this.editedItem1.id);
+      Mainpart.delete(this.editedItem1.id)
+      .then(() => {
+            Swal.fire({
+              title:"Deleted Successfully",
+              icon: "success",
+            });
+            this.cancel1();
+          })
+          .catch((error) => {
+            Swal.fire({
+              title:"Deleted Unsuccessful",
+              icon: "warning",
+            });
+            console.log(error.response);
+          });
+        this.getMainpart();
     },
     okDelete(){
       Maintenace.delete(this.editedItem.id)
@@ -589,6 +698,51 @@ export default {
             console.log(error.response);
           });
     this.getData();
+    },
+    add(item){
+      if(this.editedIndex1 >-1){
+        console.log(this.editedItem1.id);
+        Mainpart.update(this.editedItem1.id, this.editedItem1)
+        .then((response) => {
+            console.log(response);
+       
+            Swal.fire({
+              title: "Updated Successfully",
+              icon: "success",
+            });
+            this.cancelAdd();
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "Updated Unsuccessful",
+              icon: "warning",
+            });
+            console.dir(err);
+        });
+          
+      }else{
+        let data = {};
+        (this.editedItem1.machine_id = item.id), (data = this.editedItem1);
+        console.log("mainpart", data);
+        Mainpart.create(data)
+            .then((response) => {
+            console.log(response);
+       
+            Swal.fire({
+              title: "Add new Successfully",
+              icon: "success",
+            });
+            this.cancelAdd();
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "Add new Unsuccessful",
+              icon: "warning",
+            });
+            console.dir(err);
+        });
+      }
+      this.getMainpart();
     },
     save(item) {
       if (this.editedIndex > -1) {
@@ -609,7 +763,7 @@ export default {
         });
       } else {
         let data = {};
-        (this.editedItem.atm_id = item.id), (data = this.editedItem);
+        (this.editedItem.atm_id = item.id),(data = this.editedItem);
         console.log(data);
         Maintenace.create(data)
           .then((res) => {
@@ -627,7 +781,6 @@ export default {
             });
             console.dir(err);
         });
-        
       }
     this.getData();
     },
@@ -638,7 +791,17 @@ export default {
       this.date = Response.data;
       console.log(Response.data);
     });
+   
+    Sparepart.list1()
+        .then((Response) => {
+          this.data1= Response.data;
+          console.log("spare",this.data1);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
+
 };
 </script>
 <style scoped>
